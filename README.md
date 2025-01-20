@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Thrifty Gaming
+
+**Thrifty Gaming** is an e-commerce platform for gaming accessories built with modern web technologies. This project utilizes **Next.js**, **Prisma**, and other tools to deliver a high-performance and scalable application.
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Scripts](#scripts)
+- [Dependencies](#dependencies)
+- [Development](#development)
+- [License](#license)
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Make sure you have the following installed on your machine:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Node.js** v20 or higher
+- **npm** v7 or higher
+- **PostgreSQL** (if using a database locally)
+- A configured `.env.local` file with the required environment variables.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone the repository:
 
-## Learn More
+   ```bash
+   git clone https://github.com/your-repo/thrifty-gaming.git
+   cd thrifty-gaming
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Set up the database:
 
-## Deploy on Vercel
+   If using Supabase:
+   
+   ```bash
+   npm run migrate:supabase
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+5. Open the app in your browser at `http://localhost:3000`.
+
+---
+
+## Features
+
+- **Next.js 15.1.4** for server-side rendering and static site generation.
+- **Prisma ORM** for database management and migrations.
+- **Iron Session** for secure session management.
+- **TypeScript** for type safety.
+- Supabase integration for a PostgreSQL-powered database backend.
+- Modern development workflow with **Turbopack**.
+
+---
+
+## Scripts
+
+Below is a list of scripts defined in the `package.json`:
+
+- **`npm run dev`**: Starts the development server with Turbopack.
+- **`npm run build`**: Builds the application for production.
+- **`npm run start`**: Runs the production build.
+- **`npm run lint`**: Lints the codebase using ESLint.
+- **`npm run migrate:supabase`**: Deploys database migrations using Prisma and environment variables from `.env.local`.
+
+---
+
+## Dependencies
+
+### Main Dependencies
+
+- **[@prisma/client](https://www.prisma.io/docs/concepts/components/prisma-client)**: Database client for Prisma.
+- **[dotenv-cli](https://github.com/entropitor/dotenv-cli)**: CLI tool for loading environment variables.
+- **[iron-session](https://github.com/vvo/iron-session)**: Lightweight session library.
+- **[next](https://nextjs.org/)**: React framework for production-grade applications.
+- **[openid-client](https://github.com/panva/node-openid-client)**: OpenID Connect and OAuth 2.0 client.
+- **[react](https://reactjs.org/)** & **[react-dom](https://reactjs.org/)**: React library for building user interfaces.
+
+### Development Dependencies
+
+- **[@eslint/eslintrc](https://eslint.org/)**: ESLint configuration management.
+- **[eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next)**: ESLint rules optimized for Next.js projects.
+- **[typescript](https://www.typescriptlang.org/)**: TypeScript support.
+- **[@types/react](https://www.npmjs.com/package/@types/react)** & **[@types/react-dom](https://www.npmjs.com/package/@types/react-dom)**: TypeScript type definitions for React.
+- **[@types/node](https://www.npmjs.com/package/@types/node)**: TypeScript type definitions for Node.js.
+
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
