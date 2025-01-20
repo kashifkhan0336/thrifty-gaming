@@ -1,5 +1,5 @@
 import Login from '@/components/Login'
-import { getSession } from '@/lib'
+import { getSession } from '@/app/lib/auth'
 
 export default async function Home() {
   const session = await getSession()

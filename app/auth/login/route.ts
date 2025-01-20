@@ -1,4 +1,4 @@
-import { getClientConfig, getSession, clientConfig } from '@/lib'
+import { getClientConfig, getSession, clientConfig } from '@/app/lib/auth'
 import * as client from 'openid-client'
 
 export async function GET() {

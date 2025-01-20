@@ -1,4 +1,4 @@
-import { defaultSession, getSession } from '@/lib'
+import { defaultSession, getSession } from '@/app/lib/auth'
 
 export async function GET() {
   try {

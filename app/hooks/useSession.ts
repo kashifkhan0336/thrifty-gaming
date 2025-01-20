@@ -1,4 +1,4 @@
-import { SessionData } from '@/lib'
+import { SessionData } from '@/app/lib/auth'
 import { useEffect, useState } from 'react'
 
 export default function useSession() {

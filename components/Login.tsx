@@ -1,5 +1,5 @@
 'use client'
-import useSession from '@/hooks/useSession'
+import useSession from '@/app/hooks/useSession'
 
 const Login = () => {
   const { session, loading } = useSession()
