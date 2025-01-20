@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
+
 import { getSession } from "./app/lib/auth";
 const protectedRoutes = ['/dashboard']
 const publicRoutes = ['/login']

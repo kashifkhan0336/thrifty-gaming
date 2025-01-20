@@ -6,12 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:supabase": "dotenv -e  .env.local -- npx prisma migrate deploy"
   },
   "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "dotenv-cli": "^8.0.0",
     "iron-session": "^8.0.4",
     "next": "15.1.4",
     "openid-client": "^6.1.7",
+    "prisma": "^6.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
