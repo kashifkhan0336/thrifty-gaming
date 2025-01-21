@@ -1,16 +1,18 @@
-import { NextRequest } from "next/server";
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-import { getSession } from "./app/lib/auth";
-const protectedRoutes = ['/dashboard']
-const publicRoutes = ['/login']
+export function middleware(request: NextRequest) {
+  // Only run middleware for /admin routes
+  if (!request.nextUrl.pathname.startsWith('/admin')) {
+    return NextResponse.next()
+  }
 
-export default async function middleware(req: NextRequest){
-    const path = req.nextUrl.pathname
-    const isProtectedRoute = protectedRoutes.includes(path)
-    const isPublicRoute = publicRoutes.includes(path)
-    console.log(path,isProtectedRoute)
-    console.log(path,isPublicRoute)
-    //const cookie = (await cookies()).get('thrifty_session')?.value
-    
-    console.log("session ->",await getSession())
+  // Rewrite /admin to /api/admin
+  const url = request.nextUrl.clone()
+  url.pathname = url.pathname.replace('/admin', '/api/admin')
+  return NextResponse.rewrite(url)
+}
+
+export const config = {
+  matcher: ['/admin/:path*']
 }

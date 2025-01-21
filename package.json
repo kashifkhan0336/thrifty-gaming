@@ -10,8 +10,15 @@
     "migrate:supabase": "dotenv -e  .env.local -- npx prisma migrate deploy"
   },
   "dependencies": {
+    "@adminjs/express": "^6.1.1",
+    "@adminjs/prisma": "^5.0.3",
     "@prisma/client": "^6.2.1",
+    "@types/express": "^5.0.0",
+    "adminjs": "^7.8.15",
     "dotenv-cli": "^8.0.0",
+    "express": "^4.21.2",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.18.1",
     "iron-session": "^8.0.4",
     "next": "15.1.4",
     "openid-client": "^6.1.7",
