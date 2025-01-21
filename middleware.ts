@@ -1,18 +1,35 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getSession } from './app/lib/auth';
 
-export function middleware(request: NextRequest) {
-  // Only run middleware for /admin routes
-  if (!request.nextUrl.pathname.startsWith('/admin')) {
-    return NextResponse.next()
+export async function middleware(request: NextRequest) {
+  const session = await getSession();
+
+  // If the request is for /admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    // Redirect to login if the user is not authenticated
+    if (!session?.userInfo) {
+      const loginUrl = new URL('/auth/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Redirect to home if the user doesn't have admin roles
+    const hasAdminRole = session.userInfo.roles?.admin;
+    if (!hasAdminRole) {
+      const homeUrl = new URL('/', request.url);
+      return NextResponse.redirect(homeUrl);
+    }
+
+    // Rewrite /admin to /api/admin
+    const rewrittenUrl = request.nextUrl.clone();
+    rewrittenUrl.pathname = rewrittenUrl.pathname.replace('/admin', '/api/admin');
+    return NextResponse.rewrite(rewrittenUrl);
   }
 
-  // Rewrite /admin to /api/admin
-  const url = request.nextUrl.clone()
-  url.pathname = url.pathname.replace('/admin', '/api/admin')
-  return NextResponse.rewrite(url)
+  // Allow all other routes to proceed
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
-}
+  matcher: ['/admin/:path*'],
+};
