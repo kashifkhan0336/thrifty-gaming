@@ -18,16 +18,22 @@ export async function GET(request: NextRequest) {
     const { access_token } = tokenSet
     session.isLoggedIn = true
     session.access_token = access_token
+    
     const claims = tokenSet.claims()!
     const { sub } = claims
     // call userinfo endpoint to get user info
     const userinfo = await client.fetchUserInfo(openIdClientConfig, access_token, sub)
+    const roles = userinfo['urn:zitadel:iam:org:project:roles'] as Record<string, Record<string, string>> | undefined;
+    console.log(userinfo);
     // store userinfo in session
     session.userInfo = {
+    
         sub: userinfo.sub,
         name: userinfo.given_name!,
         email: userinfo.email!,
         email_verified: userinfo.email_verified!,
+        roles: roles || {},
+        
     }
 
     await session.save()
