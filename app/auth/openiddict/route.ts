@@ -15,10 +15,11 @@ export async function GET(request: NextRequest) {
         pkceCodeVerifier: session.code_verifier,
         expectedState: session.state,
     })
-    const { access_token } = tokenSet
+    const { access_token, id_token } = tokenSet
     session.isLoggedIn = true
     session.access_token = access_token
     
+session.id_token = id_token
     const claims = tokenSet.claims()!
     const { sub } = claims
     // call userinfo endpoint to get user info

@@ -18,6 +18,7 @@ export const clientConfig = {
 export interface SessionData {
   isLoggedIn: boolean;
   access_token?: string;
+  id_token?: string;
   code_verifier?: string;
   state?: string;
   userInfo?: {
