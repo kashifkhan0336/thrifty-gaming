@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate:supabase": "dotenv -e  .env.local -- npx prisma migrate deploy"
+    "migrate": "dotenv -e  .env.local -- npx prisma migrate deploy",
+    "generate-migrations": "dotenv -e  .env.local -- npx prisma migrate dev --name",
+    "generate-client": "prisma generate"
   },
   "dependencies": {
     "@adminjs/express": "^6.1.1",
