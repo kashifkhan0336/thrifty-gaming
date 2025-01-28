@@ -18,27 +18,39 @@ datasource db {
 //     USER
 // ============
 model User {
-  id       Int         @id @default(autoincrement())
-  name     String
-  email    String
-  password String
-  image    String
-  orders   OrderInfo[]
+  id             Int           @id @default(autoincrement())
+  address        String
+  payment_method PaymentMethod
+  image          String
+  orders         OrderInfo[]
+  Review         Review[]
+  Cart           Cart[]
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CARD
 }
 
 // ================
 //     PRODUCT
 // ================
 model Product {
-  id          Int         @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
-  ratings     Float
+  price       Int
   specs       String[]
   images      String[] // Cloudinary image urls
-  brand       String
-  price       Int
-  orderItem   OrderItem[]
+  tags        Tag[] // Defines many-to-many relation with the Tag table
+  brand_id    Int
+  category_id Int
+  brand       Brand    @relation(fields: [brand_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
+
+  orderItem OrderItem[]
+  Review    Review[]
+  CartItem  CartItem[]
 }
 
 // =============
@@ -76,11 +88,73 @@ enum OrderStatus {
 }
 
 model OrderItem {
-  id       Int @id @default(autoincrement())
-  quantity Int
-
+  id         Int       @id @default(autoincrement())
+  quantity   Int
   order_id   Int
   product_id Int
   product    Product   @relation(fields: [product_id], references: [id])
   order      OrderInfo @relation(fields: [order_id], references: [id])
+}
+
+// ===============
+//     REVIEWS
+// ===============
+model Review {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  product    Product  @relation(fields: [product_id], references: [id])
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  comment    String
+  ratings    Int      @default(0)
+  images     String[] @default([])
+
+  // Ensure a user can leave only one review per product
+  @@unique([user_id, product_id])
+}
+
+// ============
+//     CART
+// ============
+model Cart {
+  id      Int        @id @default(autoincrement())
+  user_id Int
+  user    User       @relation(fields: [user_id], references: [id])
+  items   CartItem[]
+}
+
+model CartItem {
+  id         Int     @id @default(autoincrement())
+  quantity   Int
+  product_id Int
+  cart_id    Int
+  product    Product @relation(fields: [product_id], references: [id])
+  cart       Cart    @relation(fields: [cart_id], references: [id])
+}
+
+// =============
+//     BRAND
+// =============
+model Brand {
+  id      Int       @id @default(autoincrement())
+  brand   String    @unique
+  Product Product[]
+}
+
+// ================
+//     CATEGORY
+// ================
+model Category {
+  id       Int       @id @default(autoincrement())
+  category String    @unique
+  Product  Product[]
+}
+
+// ===========
+//     TAG
+// ===========
+model Tag {
+  id      Int       @id @default(autoincrement())
+  tag     String    @unique
+  Product Product[] // Defines a many-to-many relation with Product table
 }
