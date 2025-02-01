@@ -9,11 +9,152 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-model Products{
+// ============
+//     USER
+// ============
+model User {
+  id             Int           @id @default(autoincrement())
+  address        String
+  payment_method PaymentMethod
+  image          String
+  orders         OrderInfo[]
+  Review         Review[]
+  Cart           Cart[]
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CARD
+}
+
+// ================
+//     PRODUCT
+// ================
+model Product {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Int
+  specs       String[]
+  images      String[] // Cloudinary image urls
+  tags        Tag[] // Defines many-to-many relation with the Tag table
+  brand_id    Int
+  category_id Int
+  brand       Brand    @relation(fields: [brand_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
+
+  orderItem OrderItem[]
+  Review    Review[]
+  CartItem  CartItem[]
+}
+
+// =============
+//     ORDER
+// =============
+model OrderInfo {
   id Int @id @default(autoincrement())
+
+  /**
+   * In SQL, foreign keys are used to create relationships among tables
+   * Here, in prisma it is represented with **@relation** syntax
+   * NOTE: This field "user" does not exist in database, it is only used to define
+   * relations at ORM level.
+   */
+  customer User @relation(fields: [customer_id], references: [id])
+
+  /**
+   * This "user_id" field is the foreign key (which exists in the database)
+   * and is used by prisma **@relation** to join orders with user
+   */
+  customer_id Int
+
+  status       OrderStatus
+  items        OrderItem[]
+  total_amount Int
+  created_at   DateTime
+  updated_at   DateTime
+}
+
+enum OrderStatus {
+  PROCESSING
+  OUT_FOR_DELIVERY
+  CANCELLED
+  DELIVERED
+}
+
+model OrderItem {
+  id         Int       @id @default(autoincrement())
+  quantity   Int
+  order_id   Int
+  product_id Int
+  product    Product   @relation(fields: [product_id], references: [id])
+  order      OrderInfo @relation(fields: [order_id], references: [id])
+}
+
+// ===============
+//     REVIEWS
+// ===============
+model Review {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  product    Product  @relation(fields: [product_id], references: [id])
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  comment    String
+  ratings    Int      @default(0)
+  images     String[] @default([])
+
+  // Ensure a user can leave only one review per product
+  @@unique([user_id, product_id])
+}
+
+// ============
+//     CART
+// ============
+model Cart {
+  id      Int        @id @default(autoincrement())
+  user_id Int
+  user    User       @relation(fields: [user_id], references: [id])
+  items   CartItem[]
+}
+
+model CartItem {
+  id         Int     @id @default(autoincrement())
+  quantity   Int
+  product_id Int
+  cart_id    Int
+  product    Product @relation(fields: [product_id], references: [id])
+  cart       Cart    @relation(fields: [cart_id], references: [id])
+}
+
+// =============
+//     BRAND
+// =============
+model Brand {
+  id      Int       @id @default(autoincrement())
+  brand   String    @unique
+  Product Product[]
+}
+
+// ================
+//     CATEGORY
+// ================
+model Category {
+  id       Int       @id @default(autoincrement())
+  category String    @unique
+  Product  Product[]
+}
+
+// ===========
+//     TAG
+// ===========
+model Tag {
+  id      Int       @id @default(autoincrement())
+  tag     String    @unique
+  Product Product[] // Defines a many-to-many relation with Product table
 }
