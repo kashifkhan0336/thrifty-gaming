@@ -65,3 +65,35 @@ export async function getSession(): Promise<IronSession<SessionData>> {
 export async function getClientConfig() {
   return await client.discovery(new URL(clientConfig.url!), clientConfig.client_id!)
 }
+
+
+export async function getEncodedMessage(message: string) {
+  const encoder = new TextEncoder();
+  return encoder.encode(message)
+}
+
+export async function importKey(rawKey: string) {
+  const keyData = new TextEncoder().encode(rawKey);
+  return await crypto.subtle.importKey(
+    "raw",
+    keyData, {
+      name: "HMAC",
+      hash: {
+        name: "SHA-512"
+      }
+    },
+    false,
+    ["sign", "verify"]
+  )
+}
+export async function signMessage(key: CryptoKey, message: string) {
+  const encodedMessage = await getEncodedMessage(message);
+  const signature = await crypto.subtle.sign("HMAC", key, encodedMessage);
+  return signature;
+}
+
+export async function verifyMessage(key: CryptoKey, message: string, signature: ArrayBuffer) {
+  const encodedMessage = await getEncodedMessage(message);
+  const result = await window.crypto.subtle.verify("HMAC", key, signature, encodedMessage);
+  return result; // true if valid, false otherwise
+}
