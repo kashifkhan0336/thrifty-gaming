@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "tsx build_admin.ts && npx prisma generate && next build",
+    "build": "npx prisma generate &&tsx build_admin.ts && next build",
     "postinstall": "patch-package",
     "start": "next start",
     "lint": "next lint",
@@ -42,5 +42,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "typescript": "^5"
+  },
+  "resolutions": {
+    "rollup": "npm:@rollup/wasm-node"
   }
 }
