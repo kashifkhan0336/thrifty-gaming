@@ -1,6 +1,6 @@
 import AdminJSExpress from "@adminjs/express";
 import express, { Request, Response } from "express";
-import { adminJs } from "../lib/admin";
+import { adminJs } from "../../admin/admin";
 
 const adminRouter = AdminJSExpress.buildRouter(adminJs);
 
