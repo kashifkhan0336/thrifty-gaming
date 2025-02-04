@@ -90,7 +90,7 @@ export const options: AdminJSOptions = {
       options: { navigation: "" },
     },
   ],
-  assetsCDN: process.env.NODE_ENV === "production" ? getBaseUrl() : undefined,
+  assetsCDN: "https://thrifty-gaming.vercel.app/",
   rootPath: "/admin",
   branding: {
     logo: false,
