@@ -1,5 +1,5 @@
 import { bundle } from "@adminjs/bundler";
-import { adminJs } from "./pages/lib/admin";
+import { adminJs } from "./admin/admin";
 
 (async () => {
   await bundle({
